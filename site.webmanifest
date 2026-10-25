@@ -1,0 +1,15 @@
+{
+  "name": "Нейро Майстерня",
+  "short_name": "Нейро",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f1f0ea",
+  "theme_color": "#f1f0ea",
+  "icons": [
+    {
+      "src": "/img/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}
