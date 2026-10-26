@@ -1,6 +1,6 @@
 /* Нейро Майстерня — working prompt sheet.
    Layout: a light static hero with a sample prompt, then a steps block,
-   then a transparent price ladder, checkout with one add-on, thank-you view with one upgrade. */
+   then one full-pack price card, checkout and a thank-you view. */
 @font-face { font-family: 'Onest'; font-weight: 400; font-display: swap; src: url('../../fonts/onest-cyrillic-400-normal.woff2') format('woff2'); unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
 @font-face { font-family: 'Onest'; font-weight: 400; font-display: swap; src: url('../../fonts/onest-latin-400-normal.woff2') format('woff2'); unicode-range: U+0000-00FF, U+2000-206F, U+20AC, U+2212, U+2192; }
 @font-face { font-family: 'Onest'; font-weight: 500; font-display: swap; src: url('../../fonts/onest-cyrillic-500-normal.woff2') format('woff2'); unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
@@ -152,7 +152,6 @@ footer a { text-decoration: none; } footer a:hover { text-decoration: underline;
 .cat .n { font-family: var(--mono); font-size: 38px; font-weight: 600; color: var(--slot); line-height: 1; }
 .cat h3 { font-size: 20px; margin: 12px 0 6px; }
 .cat p { margin: 0; color: var(--muted); font-size: 15.5px; }
-.ladder { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 44px; }
 .tier { background: var(--paper); border: 1px solid var(--line); border-radius: 22px; padding: 26px; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
 .tier.main { border: 2px solid var(--slot); background: var(--sheet); box-shadow: 0 30px 60px -40px rgba(41,69,230,.45); }
 .tier .step { font-family: var(--mono); font-size: 12.5px; color: var(--slot); font-weight: 600; text-transform: uppercase; letter-spacing: .08em; }
@@ -162,26 +161,15 @@ footer a { text-decoration: none; } footer a:hover { text-decoration: underline;
 .tier .p { margin-top: auto; padding-top: 14px; font-size: 32px; font-weight: 800; font-variant-numeric: tabular-nums; letter-spacing: -.02em; }
 .line { display: flex; justify-content: space-between; gap: 12px; font-variant-numeric: tabular-nums; }
 .line b { white-space: nowrap; }
-.bump { border: 2px dashed var(--slot); background: var(--slot-bg); border-radius: 16px; padding: 14px 16px; display: grid; grid-template-columns: auto 1fr auto; gap: 12px; align-items: start; cursor: pointer; font-weight: 400; }
-.bump input { width: 22px; height: 22px; margin-top: 2px; accent-color: var(--slot); padding: 0; }
-.bump b { display: block; color: var(--ink); }
-.bump span { color: var(--muted); font-size: 14.5px; }
-.bump .bp { font-weight: 800; color: var(--slot); white-space: nowrap; }
 .total { border-top: 2px solid var(--ink); padding-top: 12px; font-size: 21px; font-weight: 800; }
 .thanks { padding-block: 140px 100px; }
 .thanks .grid { display: grid; grid-template-columns: 1fr 1.1fr; gap: 48px; align-items: start; }
 .thanks .grid > * { min-width: 0; }
-.offer { background: var(--sheet); border: 2px solid var(--slot); border-radius: 22px; padding: 28px; display: grid; gap: 14px; }
-.offer .tag { font-family: var(--mono); font-size: 12.5px; color: var(--slot); font-weight: 600; text-transform: uppercase; letter-spacing: .08em; }
-.offer h3 { font-size: 26px; margin: 0; letter-spacing: -.02em; }
-.offer ul { margin: 0; padding-left: 18px; color: var(--muted); }
-.offer .row { display: flex; gap: 10px; flex-wrap: wrap; }
-.btn.line-btn { background: transparent; color: var(--ink); border: 1.5px solid var(--line); box-shadow: none; }
 .demo-note { font-size: 13.5px; color: var(--muted); border: 1px dashed var(--line); border-radius: 10px; padding: 8px 12px; margin: 0 0 20px; }
 .mascot2d { width: 140px; display: block; }
 .mascot2d .arm { fill: none; stroke: var(--ink); stroke-width: 8; stroke-linecap: round; stroke-linejoin: round; }
 @media (max-width: 900px) {
-  .cats { grid-template-columns: 1fr 1fr; } .ladder { grid-template-columns: 1fr; }
+  .cats { grid-template-columns: 1fr 1fr; }
   .thanks .grid { grid-template-columns: 1fr; }
   .lang button { padding: 7px 9px; }
   .site-header .btn.sm { display: none; }
@@ -218,3 +206,11 @@ footer a { text-decoration: none; } footer a:hover { text-decoration: underline;
 .prompt-answer { margin-top: 16px; padding-top: 14px; border-top: 1px dashed var(--night-line); display: grid; gap: 4px; font-family: var(--body); font-size: 15.5px; color: var(--night-muted); }
 .prompt-answer b { color: var(--slot); font-family: var(--mono); font-size: 12.5px; letter-spacing: .08em; text-transform: uppercase; }
 @media (max-width: 900px) { .prompt-card { justify-self: stretch; max-width: none; } }
+.tier.single { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 32px; align-items: end; margin-top: 44px; padding: 32px; }
+.tier.single h3 { font-size: 26px; }
+.tier.single ul { font-size: 17px; gap: 8px; margin-top: 14px; }
+.tier.single .buy { display: grid; gap: 10px; justify-items: start; min-width: 220px; }
+.tier.single .p { padding-top: 0; font-size: 46px; line-height: 1; }
+.tier.single .buy p { margin: 0; color: var(--muted); font-size: 14.5px; }
+.thanks .grid.one { grid-template-columns: 1fr; max-width: 640px; }
+@media (max-width: 900px) { .tier.single { grid-template-columns: 1fr; padding: 24px; } }
