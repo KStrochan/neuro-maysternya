@@ -149,12 +149,12 @@
       <div>
         <div class="kicker" data-i="coK">Оформлення</div>
         <h2 class="title" data-i="coH">Отримати повний пакет</h2>
-        <p class="lead" data-i="coLead">Залиште контакт, і на наступному кроці покажемо, як оплатити через EasyPay. Після оплати надішлемо PDF у Telegram або на пошту.</p>
+        <p class="lead" data-i="coLead">Залиште email, і на наступному кроці покажемо, як оплатити через EasyPay. PDF прийде листом одразу після оплати.</p>
       </div>
       <form id="orderForm" novalidate>
         <div class="line total"><span data-i="lFull">Повний пакет: 250 промптів, 3 проєкти, гайд</span><b data-price="full">299 грн</b></div>
         <label for="name"><span data-i="fName">Ім'я</span><input id="name" name="name" autocomplete="name" required></label>
-        <label for="contact"><span data-i="fContact">Telegram, телефон або email</span><input id="contact" name="contact" required placeholder="@username, +380… або email"></label>
+        <label for="contact"><span data-i="fContact">Email</span><input id="contact" name="contact" type="email" inputmode="email" required placeholder="you@gmail.com" autocomplete="email"></label>
         <button class="btn" type="submit" id="submit" data-i="submit">Перейти до оплати</button>
         <div class="status" id="status" role="status" aria-live="polite"></div>
         <p class="note"><span data-i="agree">Натискаючи кнопку, ви погоджуєтесь з</span> <a href="privacy.html" data-i="privacyLink">політикою конфіденційності</a>.</p>
@@ -187,7 +187,7 @@
           <path class="arm" d="M38 74H26V30h12"/><path class="arm" d="M162 74h12V30h-12"/>
         </svg>
         <h2 class="title" data-i="thH">Дякуємо! Заявку прийнято</h2>
-        <p class="lead" data-i="thLead">Ми напишемо вам найближчим часом і надішлемо PDF.</p>
+        <p class="lead" data-i="thLead">Лист із PDF уже йде на вашу пошту. Якщо не бачите його за кілька хвилин, перевірте «Спам».</p>
       </div>
     </div>
   </div>

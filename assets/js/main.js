@@ -27,18 +27,18 @@ const EN = {
   k12: 'For online stores', k12p: 'Product listings, abandoned carts, returns, shipping.',
   ladK: 'Price', ladH: 'Everything in one pack', t3h: 'Full pack', t3a: '250 prompts in 12 categories', t3b: '3 Claude Projects: café, salon, online store',
   t3c: '“Website in one evening” guide: brief, prompts and free publishing', t3d: '5 rules that make Claude answer like a pro', t3n: 'One payment · PDF, 29 pages', cta3: 'Get the pack',
-  coK: 'Checkout', coH: 'Get the full pack', coLead: 'Leave your contact and we will send the payment link and the PDF. Once online payment is live, the file will arrive automatically.',
-  lFull: 'Full pack: 250 prompts, 3 projects, guide', fName: 'Name', fContact: 'Email or Telegram', submit: 'Get it',
+  coK: 'Checkout', coH: 'Get the full pack', coLead: 'Leave your email and we will send you the payment details and the PDF.',
+  lFull: 'Full pack: 250 prompts, 3 projects, guide', fName: 'Name', fContact: 'Email', submit: 'Get it',
   agree: 'By clicking the button you agree to the', privacyLink: 'privacy policy', faqK: 'Questions', faqH: 'FAQ',
   q1: 'Do I need a paid Claude plan?', a1: 'No. Every prompt works on the free plan. A paid plan gives you more messages per day.', q2: 'I have never used AI tools. Will I manage?', a2: 'Yes. The first page explains how to write prompts, and each prompt only needs copying and filling in the brackets.',
   q3: 'What are Claude Projects?', a3: 'Ready-made instructions for a café, a salon and an online store. Claude learns about your business once and remembers it in every chat of the project.',
   q4: 'Do the prompts work in ChatGPT or Gemini?', a4: 'Mostly yes, they are written in plain language. But we wrote them for Claude.',
-  thH: 'Thank you! Your order is in', thLead: 'We will get in touch shortly and send your PDF.',
+  thH: 'Thank you! Your order is in', thLead: 'We will email you about payment shortly. Check your spam folder if you do not see it.',
   foot: '© 2026 Neuro Maysternya · independent guide, not affiliated with Anthropic. Claude is a trademark of Anthropic.', privacyFoot: 'Privacy policy',
 };
 const MSG = {
-  uk: { need: "Вкажіть ім'я і контакт.", sending: 'Надсилаємо…', fail: 'Не вдалося надіслати заявку. Спробуйте ще раз за хвилину.', product: 'Повний пакет', cta: 'Отримати за ' },
-  en: { need: 'Please enter your name and contact.', sending: 'Sending…', fail: 'Could not send your order. Please try again in a minute.', product: 'Full pack', cta: 'Get it for ' },
+  uk: { need: "Вкажіть ім'я і email.", sending: 'Надсилаємо…', fail: 'Не вдалося надіслати заявку. Спробуйте ще раз за хвилину.', product: 'Повний пакет', cta: 'Отримати за ' },
+  en: { need: 'Please enter your name and email.', sending: 'Sending…', fail: 'Could not send your order. Please try again in a minute.', product: 'Full pack', cta: 'Get it for ' },
 };
 const UK = {};
 document.querySelectorAll('[data-i]').forEach((el) => { UK[el.dataset.i] = UK[el.dataset.i] || el.textContent; });
@@ -59,7 +59,6 @@ function applyLang() {
   const dict = lang === 'en' ? EN : UK;
   document.querySelectorAll('[data-i]').forEach((el) => { const v = dict[el.dataset.i]; if (v) el.textContent = v; });
   $('#l-uk').setAttribute('aria-pressed', lang === 'uk'); $('#l-en').setAttribute('aria-pressed', lang === 'en');
-  $('#contact').placeholder = lang === 'uk' ? '@username, +380… або email' : 'you@example.com or @username';
   renderPrices();
 }
 function switchLang(l) {
@@ -88,17 +87,19 @@ async function send(payload) {
 $('#orderForm').addEventListener('submit', async (e) => {
   e.preventDefault();
   const st = $('#status'), name = $('#name').value.trim(), contact = $('#contact').value.trim(), P = PRICES[lang];
-  if (!name || !contact) { st.className = 'status err'; st.textContent = MSG[lang].need; return; }
+  if (!name || !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(contact)) { st.className = 'status err'; st.textContent = MSG[lang].need; return; }
   st.className = 'status'; st.textContent = MSG[lang].sending; $('#submit').disabled = true;
   try {
     const site = `Нейро Майстерня (${lang.toUpperCase()})`, product = MSG[lang].product + ' — ' + money(P.full);
     const showThanks = () => { $('#landing').hidden = true; $('#thanks').hidden = false; $('#demoNote').hidden = !DEMO; scrollTo(0, 0); onScroll(); };
     // Ukrainian buyers pay by EasyPay card transfer; the English version stays a pre-order.
     if (lang === 'uk' && !DEMO) {
-      const mode = await checkout($('#orderForm'), { site, product, price: money(P.full), amount: P.full, name, contact, onDone: () => setTimeout(showThanks, 1600) });
-      if (mode === 'lead') showThanks();
+      const lead = (t) => { $('[data-i="thLead"]').textContent = t; };
+      const mode = await checkout($('#orderForm'), { site, product, price: money(P.full), amount: P.full, name, contact,
+        onDone: (delivered) => { if (!delivered) lead('Перевіряємо оплату — PDF прийде на вашу пошту протягом дня.'); setTimeout(showThanks, 1600); } });
+      if (mode === 'lead') { lead('Ми надіслали підтвердження на вашу пошту і напишемо щодо оплати.'); showThanks(); }
     } else {
-      await send({ site, name, contact, product });
+      await send({ site, name, contact, product, lang, stage: 'lead' });
       showThanks();
     }
   } catch {
