@@ -32,7 +32,7 @@
     { "@type": "Organization", "@id": "https://neuro-maysternya.vercel.app/#org", "name": "Нейро Майстерня", "url": "https://neuro-maysternya.vercel.app/", "logo": "https://neuro-maysternya.vercel.app/img/favicon.svg" },
     { "@type": "WebSite", "name": "Нейро Майстерня", "url": "https://neuro-maysternya.vercel.app/", "inLanguage": ["uk", "en"] },
     { "@type": "Product", "name": "Claude для бізнесу: повний пакет", "description": "PDF: 250 промптів у 12 категоріях, 3 Claude-проєкти під нішу, гайд «Сайт-візитка за вечір» і 5 правил хорошого промпту.", "brand": { "@id": "https://neuro-maysternya.vercel.app/#org" }, "image": "https://neuro-maysternya.vercel.app/img/og.png",
-      "offers": { "@type": "Offer", "price": "299", "priceCurrency": "UAH", "availability": "https://schema.org/InStock", "url": "https://neuro-maysternya.vercel.app/#checkout" } },
+      "offers": { "@type": "Offer", "price": "299", "priceCurrency": "UAH", "priceValidUntil": "2026-11-02", "availability": "https://schema.org/InStock", "url": "https://neuro-maysternya.vercel.app/#checkout" } },
     { "@type": "FAQPage", "mainEntity": [
       { "@type": "Question", "name": "Потрібна платна підписка Claude?", "acceptedAnswer": { "@type": "Answer", "text": "Ні. Усі промпти працюють і на безкоштовному плані. Платна підписка дає більше повідомлень на день." } },
       { "@type": "Question", "name": "Я ніколи не користувався нейромережами. Розберуся?", "acceptedAnswer": { "@type": "Answer", "text": "Так. Перша сторінка пояснює, як писати запити, а кожен промпт достатньо скопіювати і замінити дані в дужках." } },
@@ -43,13 +43,14 @@
 </script>
 <!-- Meta Pixel: встав сюди код пікселя з Events Manager, коли створиш рекламний кабінет -->
 </head>
-<body>
+<body data-promo-until="2026-11-02T23:59:59+02:00" data-price-now="299" data-price-after="399">
 <a class="skip" href="#main">До змісту</a>
 
 <header class="site-header" id="top">
+  <div class="promo-bar" data-promo hidden><span data-i="promoBar">🔥 Ціна запуску 299 грн — до неділі, 2 листопада</span> <b data-countdown></b></div>
   <div class="wrap">
     <a class="logo" href="#top" aria-label="Нейро Майстерня — на початок">Нейро <span>Майстерня</span></a>
-    <nav aria-label="Розділи"><a href="#inside" data-i="navInside">Що всередині</a><a href="#price" data-i="navPrice">Ціна</a><a href="#faq" data-i="navFaq">Питання</a></nav>
+    <nav aria-label="Розділи"><a href="#inside" data-i="navInside">Що всередині</a><a href="#recap" data-i="navPrice">Ціна</a><a href="#faq" data-i="navFaq">Питання</a></nav>
     <div class="h-right">
       <div class="lang" role="group" aria-label="Мова / Language"><button type="button" id="l-uk" aria-pressed="true">UA</button><button type="button" id="l-en" aria-pressed="false">EN</button></div>
       <a class="btn sm" href="#checkout" data-i="nav">Отримати</a>
@@ -65,7 +66,8 @@
         <h1 data-i="h1">250 промптів, які працюють на ваш бізнес</h1>
         <p><span data-i="lead1">Копіюєте, замінюєте</span> <span class="slotword" data-i="brackets">[дужки]</span> <span data-i="lead2">на свої дані — і Claude пише пости, відповіді клієнтам, тексти для сайту й рахує ціни.</span></p>
         <div class="row"><a class="btn" href="#checkout" data-i="cta">Отримати за 299 грн</a><a class="btn ghost" href="#inside" data-i="cta2">Що всередині</a></div>
-        <p class="note-sm" data-i="ctaNote">PDF після оплати · працює на безкоштовному Claude</p>
+        <ul class="chips"><li data-i="chip1">PDF на пошту одразу після оплати</li><li data-i="chip2">Працює на безкоштовному Claude</li><li data-i="chip3">Менше 2 грн за промпт</li></ul>
+        <p class="promo-line" data-promo hidden>Ціна запуску 299 грн діє ще <b data-countdown></b>. З 3 листопада — 399 грн.</p>
       </div>
       <figure class="prompt-card" aria-label="Приклад промпту">
         <figcaption><span data-i="pcHead">Промпт · контент-план</span><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span></figcaption>
@@ -100,6 +102,17 @@
     </div>
   </section>
 
+  <section class="block" id="fit">
+    <div class="wrap">
+      <div class="kicker" data-i="fitK">Кому підходить</div>
+      <h2 class="title" data-i="fitH">Пакет саме для вас, якщо ви…</h2>
+      <div class="fit">
+        <div class="fit-col yes"><h3 data-i="fitYes">Так, вам підходить</h3><ul><li data-i="y1">Маєте малий бізнес або працюєте на себе</li><li data-i="y2">Чули про Claude, але не знаєте, що саме йому писати</li><li data-i="y3">Витрачаєте вечори на пости, відповіді клієнтам і тексти</li><li data-i="y4">Хочете сайт-візитку без програміста</li><li data-i="y5">Не хочете платити SMM-нику за кожен контент-план</li><li data-i="y6">Любите готові шаблони замість теорії</li></ul></div>
+        <div class="fit-col no"><h3 data-i="fitNo">Мабуть, не підійде, якщо ви</h3><ul><li data-i="n1">Шукаєте «мільйон за ніч» без власної роботи</li><li data-i="n2">Вже пишете складні промпти і будуєте AI-агентів</li></ul></div>
+      </div>
+    </div>
+  </section>
+
   <section class="block block-alt" id="inside">
     <div class="wrap">
       <div class="kicker" data-i="k0">Що всередині</div>
@@ -121,24 +134,16 @@
     </div>
   </section>
 
-  <section class="block" id="price">
+  <section class="block block-alt" id="recap">
     <div class="wrap">
-      <div class="kicker" data-i="ladK">Ціна</div>
-      <h2 class="title" data-i="ladH">Усе в одному пакеті</h2>
-      <div class="tier main single">
-        <div>
-          <h3 data-i="t3h">Повний пакет</h3>
-          <ul>
-            <li data-i="t3a">250 промптів у 12 категоріях</li>
-            <li data-i="t3b">3 Claude-проєкти: кав'ярня, салон, магазин</li>
-            <li data-i="t3c">Гайд «Сайт-візитка за вечір»: бриф, промпти і безкоштовна публікація</li>
-            <li data-i="t3d">5 правил, після яких Claude відповідає як профі</li>
-          </ul>
-        </div>
-        <div class="buy">
-          <div class="p" data-price="full">299 грн</div>
-          <p data-i="t3n">Один платіж · PDF, 29 сторінок</p>
-          <a class="btn" href="#checkout" data-i="cta3">Отримати пакет</a>
+      <div class="kicker" data-i="rcK">Порахуємо разом</div>
+      <h2 class="title" data-i="rcH">Усе, що ви отримуєте за один платіж</h2>
+      <div class="recap">
+        <ul class="recap-list"><li><span class="ok" aria-hidden="true">✓</span><div><b data-i="r1">250 промптів у 12 категоріях</b><span data-i="r1p">контент, реклама, продажі, сайт, гроші, команда</span></div></li><li><span class="ok" aria-hidden="true">✓</span><div><b data-i="r2">3 Claude-проєкти</b><span data-i="r2p">кав'ярня, салон, інтернет-магазин</span></div></li><li><span class="ok" aria-hidden="true">✓</span><div><b data-i="r3">Гайд «Сайт-візитка за вечір»</b><span data-i="r3p">бриф, промпти і безкоштовна публікація</span></div></li><li><span class="ok" aria-hidden="true">✓</span><div><b data-i="r4">5 правил хорошого промпту</b><span data-i="r4p">після них Claude відповідає як профі</span></div></li><li><span class="ok" aria-hidden="true">✓</span><div><b data-i="r5">Зміст із номерами</b><span data-i="r5p">потрібний промпт — за 10 секунд</span></div></li></ul>
+        <div class="recap-buy">
+          <div class="recap-total"><span data-i="rcTot">Разом</span><b data-price="full">299 грн</b></div>
+          <p class="promo-line" data-promo hidden>Ціна запуску діє ще <b data-countdown></b>. З 3 листопада — 399 грн.</p>
+          <a class="btn" href="#checkout" data-i="rcCta">Отримати зараз</a>
         </div>
       </div>
     </div>
@@ -153,7 +158,6 @@
       </div>
       <form id="orderForm" novalidate>
         <div class="line total"><span data-i="lFull">Повний пакет: 250 промптів, 3 проєкти, гайд</span><b data-price="full">299 грн</b></div>
-        <label for="name"><span data-i="fName">Ім'я</span><input id="name" name="name" autocomplete="name" required></label>
         <label for="contact"><span data-i="fContact">Email</span><input id="contact" name="contact" type="email" inputmode="email" required placeholder="you@gmail.com" autocomplete="email"></label>
         <button class="btn" type="submit" id="submit" data-i="submit">Перейти до оплати</button>
         <div class="status" id="status" role="status" aria-live="polite"></div>
@@ -170,6 +174,14 @@
       <details><summary data-i="q2">Я ніколи не користувався нейромережами. Розберуся?</summary><p data-i="a2">Так. Перша сторінка пояснює, як писати запити, а кожен промпт достатньо скопіювати і замінити дані в дужках.</p></details>
       <details><summary data-i="q3">Що таке Claude-проєкти?</summary><p data-i="a3">Готові інструкції для кав'ярні, салону і магазину. Claude один раз дізнається про ваш бізнес і пам'ятає це в кожному чаті проєкту.</p></details>
       <details><summary data-i="q4">Промпти працюють у ChatGPT чи Gemini?</summary><p data-i="a4">Здебільшого так: вони написані звичайною мовою. Але писали ми їх саме під Claude.</p></details>
+    </div>
+  </section>
+  <section class="final" id="final">
+    <div class="wrap">
+      <h2 data-i="finH">Ваш бізнес не почне економити час, поки ви не натиснете кнопку</h2>
+      <p data-i="finP">Перший готовий контент-план — через 5 хвилин після оплати.</p>
+      <a class="btn" href="#checkout" data-p data-i="finCta">Отримати 250 промптів за 299 грн</a>
+      <p class="promo-line" data-promo hidden>Ціна запуску ще <b data-countdown></b> · потім 399 грн</p>
     </div>
   </section>
 </main>
@@ -193,11 +205,27 @@
   </div>
 </main>
 
+<div class="gift" id="gift" hidden role="dialog" aria-modal="true" aria-labelledby="giftH">
+  <div class="gift-card">
+    <button type="button" class="gift-x" id="giftClose" aria-label="Закрити">×</button>
+    <div class="gift-tag" data-i="gTag">Подарунок</div>
+    <h3 id="giftH" data-i="gH">Зачекайте! Заберіть 20 промптів безкоштовно</h3>
+    <p data-i="gP">Найпотрібніші промпти для маркетингу, продажів і цін — PDF прийде на пошту за хвилину.</p>
+    <form id="giftForm" novalidate>
+      <input id="giftEmail" type="email" inputmode="email" autocomplete="email" placeholder="you@gmail.com" required aria-label="Email">
+      <button class="btn" type="submit" data-i="gBtn">Забрати подарунок</button>
+      <div class="status" id="giftStatus" role="status" aria-live="polite"></div>
+    </form>
+    <button type="button" class="gift-no" id="giftNo" data-i="gNo">Ні, дякую</button>
+  </div>
+</div>
+
 <footer>
   <div class="wrap"><span data-i="foot">© 2026 Нейро Майстерня · незалежний гайд, не пов'язаний з Anthropic. Claude — торгова марка Anthropic.</span><span><a href="privacy.html" data-i="privacyFoot">Політика конфіденційності</a></span></div>
 </footer>
 
 <script type="module" src="assets/js/main.js"></script>
 <script type="module" src="assets/js/motion.js"></script>
+<script type="module" src="assets/js/gift.js"></script>
 </body>
 </html>
