@@ -24,7 +24,6 @@
 <link rel="manifest" href="/site.webmanifest">
 <link rel="preload" href="/fonts/onest-cyrillic-800-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/onest-cyrillic-400-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="modulepreload" href="/vendor/three.module.min.js">
 <link rel="stylesheet" href="assets/css/site.css">
 <script type="application/ld+json">
 {
@@ -61,42 +60,45 @@
 </header>
 
 <main id="landing">
-  <section class="story" id="story" aria-label="Як працює промпт">
-    <div class="story-stage">
-      <canvas aria-hidden="true"></canvas>
-      <div class="story-vignette"></div>
-      <div class="story-progress"><i></i></div>
-      <div class="captions">
-        <div class="cap" data-from="0" data-to="0.14">
-          <div class="eyebrow" data-i="e1">Claude для малого бізнесу</div>
-          <h1 data-i="h1">20 промптів, які працюють на ваш бізнес</h1>
-          <p><span data-i="lead1">Копіюєте, замінюєте</span> <span class="slotword" data-i="brackets">[дужки]</span> <span data-i="lead2">на свої дані — і Claude пише пости, відповіді клієнтам, тексти для сайту й рахує ціни.</span></p>
-          <div class="row"><a class="btn" href="#checkout" data-i="cta">Отримати за 79 грн</a><a class="btn ghost" href="#inside" data-i="cta2">Що всередині</a></div>
-          <p class="note-sm" data-i="ctaNote">PDF одразу після оплати · працює на безкоштовному Claude</p>
-        </div>
-        <div class="cap" data-from="0.14" data-to="0.34">
-          <div class="eyebrow" data-i="e2">Крок 1</div>
-          <h2 data-i="h2a">Скопіюйте готовий промпт</h2>
-          <p data-i="p2">Кожен промпт уже має роль, задачу і формат відповіді. Вам лишається лише замінити те, що в дужках.</p>
-        </div>
-        <div class="cap" data-from="0.34" data-to="0.52">
-          <div class="eyebrow" data-i="e3">Крок 2</div>
-          <h2 data-i="h2b">Замініть дужки на свій бізнес</h2>
-          <p data-i="p3">«Кав'ярня біля університету», «студенти» — і промпт стає вашим. Жодних налаштувань.</p>
-        </div>
-        <div class="cap" data-from="0.52" data-to="0.74">
-          <div class="eyebrow" data-i="e4">Крок 3</div>
-          <h2 data-i="h2c">Отримайте готовий результат</h2>
-          <p data-i="p4">Контент-план на місяць таблицею, відповідь клієнту, текст для сайту — за хвилину замість вечора.</p>
-        </div>
-        <div class="cap" data-from="0.74" data-to="1.01">
-          <div class="eyebrow" data-i="e5">«Старт»</div>
-          <h2 data-i="h2d">20 промптів у 6 напрямках</h2>
-          <p data-i="p5">Маркетинг, продажі, тексти для сайту, таблиці, ціни і команда. Плюс 5 правил, після яких Claude відповідає як профі.</p>
-          <div class="row"><a class="btn" href="#checkout" data-i="cta3">Отримати за 79 грн</a></div>
-        </div>
+  <section class="hero" id="hero" aria-label="Як працює промпт">
+    <div class="wrap hero-grid">
+      <div class="cap">
+        <div class="eyebrow" data-i="e1">Claude для малого бізнесу</div>
+        <h1 data-i="h1">20 промптів, які працюють на ваш бізнес</h1>
+        <p><span data-i="lead1">Копіюєте, замінюєте</span> <span class="slotword" data-i="brackets">[дужки]</span> <span data-i="lead2">на свої дані — і Claude пише пости, відповіді клієнтам, тексти для сайту й рахує ціни.</span></p>
+        <div class="row"><a class="btn" href="#checkout" data-i="cta">Отримати за 79 грн</a><a class="btn ghost" href="#inside" data-i="cta2">Що всередині</a></div>
+        <p class="note-sm" data-i="ctaNote">PDF одразу після оплати · працює на безкоштовному Claude</p>
       </div>
-      <div class="scroll-hint" aria-hidden="true"><span data-i="scroll">Гортайте</span><i></i></div>
+      <figure class="prompt-card" aria-label="Приклад промпту">
+        <figcaption><span data-i="pcHead">Промпт · контент-план</span><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span></figcaption>
+        <p><span data-i="pc1">Ти — SMM-менеджер. Склади контент-план на місяць для</span> <span class="slotword" data-i="pcS1">[кав'ярня біля університету]</span>.
+        <span data-i="pc2">Аудиторія:</span> <span class="slotword" data-i="pcS2">[студенти]</span>. <span data-i="pc3">Формат: таблиця — дата, тема, формат, текст.</span></p>
+        <div class="prompt-answer"><b data-i="pcAns">Claude</b><span data-i="pcAnsT">Готово: 30 постів, 8 Reels і 4 каруселі — таблицею, яку можна вставити в Google Таблиці.</span></div>
+      </figure>
+    </div>
+  </section>
+
+  <section class="block" id="how-it-works">
+    <div class="wrap">
+      <div class="kicker" data-i="flowK">Як це працює</div>
+      <h2 class="title" data-i="flowH">Три кроки до готового результату</h2>
+      <ol class="flow">
+        <li>
+          <div class="kicker" data-i="e2">Крок 1</div>
+          <h3 data-i="h2a">Скопіюйте готовий промпт</h3>
+          <p data-i="p2">Кожен промпт уже має роль, задачу і формат відповіді. Вам лишається лише замінити те, що в дужках.</p>
+        </li>
+        <li>
+          <div class="kicker" data-i="e3">Крок 2</div>
+          <h3 data-i="h2b">Замініть дужки на свій бізнес</h3>
+          <p data-i="p3">«Кав'ярня біля університету», «студенти» — і промпт стає вашим. Жодних налаштувань.</p>
+        </li>
+        <li>
+          <div class="kicker" data-i="e4">Крок 3</div>
+          <h3 data-i="h2c">Отримайте готовий результат</h3>
+          <p data-i="p4">Контент-план на місяць таблицею, відповідь клієнту, текст для сайту — за хвилину замість вечора.</p>
+        </li>
+      </ol>
     </div>
   </section>
 

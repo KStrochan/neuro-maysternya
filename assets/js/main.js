@@ -1,6 +1,3 @@
-import { createStory } from './story.js';
-import { buildPrompt } from './prompt-scene.js';
-
 const $ = (s) => document.querySelector(s);
 const PRICES = { uk: { start: 79, site: 99, full: 299, fmt: (n) => n + ' грн' }, en: { start: 1.99, site: 2.49, full: 6.99, fmt: (n) => '$' + n.toFixed(2) } };
 const EN = {
@@ -10,7 +7,10 @@ const EN = {
   ctaNote: 'PDF right after payment · works on free Claude', e2: 'Step 1', h2a: 'Copy a ready-made prompt', p2: 'Every prompt already has a role, a task and an output format. You only replace what is in brackets.',
   e3: 'Step 2', h2b: 'Fill the brackets with your business', p3: '“A coffee shop next to a university”, “students” — and the prompt is yours. No setup.',
   e4: 'Step 3', h2c: 'Get a finished result', p4: 'A month of content as a table, a reply to a customer, website copy — in a minute instead of an evening.',
-  e5: '“Start”', h2d: '20 prompts across 6 areas', p5: 'Marketing, sales, website copy, spreadsheets, pricing and team. Plus 5 rules that make Claude answer like a pro.', cta3: 'Get it for $1.99', scroll: 'Scroll',
+  e5: '“Start”', h2d: '20 prompts across 6 areas', p5: 'Marketing, sales, website copy, spreadsheets, pricing and team. Plus 5 rules that make Claude answer like a pro.', cta3: 'Get it for $1.99',
+  pcHead: 'Prompt · content plan', pc1: 'You are an SMM manager. Write a one-month content plan for', pcS1: '[a coffee shop next to a university]', pc2: 'Audience:', pcS2: '[students]',
+  pc3: 'Format: a table with date, topic, format and copy.', pcAns: 'Claude', pcAnsT: 'Done: 30 posts, 8 Reels and 4 carousels as a table you can paste into Google Sheets.',
+  flowK: 'How it works', flowH: 'Three steps to a finished result',
   k0: 'What’s inside', catsH: '20 “Start” prompts across 6 areas', k1: 'Instagram & marketing', k1p: 'Content plans, carousels, Reels hooks.', k2: 'Sales & customers', k2p: 'Answering “too expensive”, reviews, FAQ.',
   k3: 'Website copy', k3p: 'Hero section, “Why us”, rewriting copy.', k4: 'Operations & spreadsheets', k4p: 'Shift checklists, Google Sheets formulas.', k5: 'Money & pricing', k5p: 'Break-even point, cost of goods.', k6: 'Team & productivity', k6p: 'Job posts, onboarding, planning your week.',
   ladK: 'Pricing', ladH: 'Start small. Add more when you need it', t1s: 'Step 1', t1h: 'Start', t1p: '20 prompts and 5 rules of a good prompt. PDF, 5 pages.', t2s: 'Add-on at checkout', t2h: 'A website in one evening',
@@ -41,7 +41,7 @@ const money = (n) => PRICES[lang].fmt(Math.round(n * 100) / 100);
 function renderPrices() {
   const P = PRICES[lang];
   document.querySelectorAll('[data-price]').forEach((el) => { const k = el.dataset.price; el.textContent = (k === 'site' ? '+' : '') + money(P[k]); });
-  ['cta', 'cta3'].forEach((k) => { const el = document.querySelector(`[data-i="${k}"]`); if (el) el.textContent = MSG[lang].cta + money(P.start); });
+  ['cta'].forEach((k) => { const el = document.querySelector(`[data-i="${k}"]`); if (el) el.textContent = MSG[lang].cta + money(P.start); });
   $('#total').textContent = money(P.start + ($('#bump').checked ? P.site : 0));
   if (order) renderOffer();
 }
@@ -60,32 +60,19 @@ function applyLang() {
 }
 function switchLang(l) {
   if (l === lang) return;
+  lang = l;
   try { localStorage.setItem('nm-lang', l); } catch (e) {}
-  // The 3D cards carry text, so the scene is rebuilt in the new language.
-  if (l === 'en') location.hash = 'en'; else history.replaceState(null, '', location.pathname + location.search);
-  location.reload();
+  if (l === 'en') history.replaceState(null, '', '#en'); else history.replaceState(null, '', location.pathname + location.search);
+  applyLang();
 }
 $('#l-uk').addEventListener('click', () => switchLang('uk'));
 $('#l-en').addEventListener('click', () => switchLang('en'));
 $('#bump').addEventListener('change', renderPrices);
 applyLang();
 
-// ---------- 3D story ----------
-const story = document.getElementById('story');
-Promise.race([
-  Promise.all([document.fonts.load("500 44px 'IBM Plex Mono'"), document.fonts.load('700 64px Onest')]).catch(() => {}),
-  new Promise((r) => setTimeout(r, 2500)),
-]).then(() => {
-  createStory({
-    section: story,
-    build: (ctx) => buildPrompt({ ...ctx, lang }),
-    offset: { wide: [-0.12, 0], tall: [0.03, 0.17] },
-    tallZoom: 0.72,
-    onProgress(p) { story.classList.toggle('scrolled', p > 0.02); },
-  });
-});
+const hero = document.getElementById('hero');
 const header = document.querySelector('.site-header');
-const onScroll = () => header.classList.toggle('solid', !$('#landing').hidden && story.getBoundingClientRect().bottom < 80 || $('#landing').hidden);
+const onScroll = () => header.classList.toggle('solid', !$('#landing').hidden && hero.getBoundingClientRect().bottom < 80 || $('#landing').hidden);
 addEventListener('scroll', onScroll, { passive: true });
 onScroll();
 
