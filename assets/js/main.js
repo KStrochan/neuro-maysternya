@@ -1,10 +1,12 @@
+import { checkout } from './pay.js';
+
 const $ = (s) => document.querySelector(s);
 const PRICES = { uk: { full: 299, fmt: (n) => n + ' грн' }, en: { full: 6.99, fmt: (n) => '$' + n.toFixed(2) } };
 const EN = {
   navInside: 'What’s inside', navPrice: 'Price', navFaq: 'FAQ', nav: 'Get it',
   e1: 'Claude for small business', h1: '250 prompts that put Claude to work for your business', lead1: 'Copy, replace the', brackets: '[brackets]',
   lead2: 'with your details, and Claude writes posts, replies to customers, website copy and does your pricing maths.', cta: 'Get it for $6.99', cta2: 'What’s inside',
-  ctaNote: 'PDF right after payment · works on free Claude', e2: 'Step 1', h2a: 'Copy a ready-made prompt', p2: 'Every prompt already has a role, a task and an output format. You only replace what is in brackets.',
+  ctaNote: 'PDF after payment · works on free Claude', e2: 'Step 1', h2a: 'Copy a ready-made prompt', p2: 'Every prompt already has a role, a task and an output format. You only replace what is in brackets.',
   e3: 'Step 2', h2b: 'Fill the brackets with your business', p3: '“A coffee shop next to a university”, “students” — and the prompt is yours. No setup.',
   e4: 'Step 3', h2c: 'Get a finished result', p4: 'A month of content as a table, a reply to a customer, website copy — in a minute instead of an evening.',
   pcHead: 'Prompt · content plan', pc1: 'You are an SMM manager. Write a one-month content plan for', pcS1: '[a coffee shop next to a university]', pc2: 'Audience:', pcS2: '[students]',
@@ -89,10 +91,17 @@ $('#orderForm').addEventListener('submit', async (e) => {
   if (!name || !contact) { st.className = 'status err'; st.textContent = MSG[lang].need; return; }
   st.className = 'status'; st.textContent = MSG[lang].sending; $('#submit').disabled = true;
   try {
-    await send({ site: `Нейро Майстерня (${lang.toUpperCase()})`, name, contact, product: MSG[lang].product + ' ' + money(P.full) });
-    $('#landing').hidden = true; $('#thanks').hidden = false; $('#demoNote').hidden = !DEMO;
-    scrollTo(0, 0); onScroll();
+    const site = `Нейро Майстерня (${lang.toUpperCase()})`, product = MSG[lang].product + ' — ' + money(P.full);
+    const showThanks = () => { $('#landing').hidden = true; $('#thanks').hidden = false; $('#demoNote').hidden = !DEMO; scrollTo(0, 0); onScroll(); };
+    // Ukrainian buyers pay by EasyPay card transfer; the English version stays a pre-order.
+    if (lang === 'uk' && !DEMO) {
+      const mode = await checkout($('#orderForm'), { site, product, price: money(P.full), amount: P.full, name, contact, onDone: () => setTimeout(showThanks, 1600) });
+      if (mode === 'lead') showThanks();
+    } else {
+      await send({ site, name, contact, product });
+      showThanks();
+    }
   } catch {
     st.className = 'status err'; st.textContent = MSG[lang].fail;
-  } finally { $('#submit').disabled = false; }
+  } finally { const b = $('#submit'); if (b) b.disabled = false; }
 });
