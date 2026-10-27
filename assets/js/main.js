@@ -1,5 +1,5 @@
-import { checkout } from './pay.js';
-import { startPromo, price } from './promo.js';
+import { checkout } from './pay.js?v=20261027a';
+import { startPromo, price } from './promo.js?v=20261027a';
 
 // Launch price first: it rewrites prices in the markup before the Ukrainian texts are captured below.
 startPromo();
