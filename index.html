@@ -60,10 +60,15 @@
 
 <main id="landing">
   <section class="hero" id="hero" aria-label="Як працює промпт">
+    <div class="hero-media" aria-hidden="true">
+      <picture><source media="(max-width: 767px)" srcset="assets/hero/poster-m.webp"><img src="assets/hero/poster.webp" alt="" fetchpriority="high"></picture>
+      <video muted loop playsinline preload="auto"><source src="assets/hero/hero-m.mp4" type="video/mp4" media="(max-width: 767px)"><source src="assets/hero/hero.mp4" type="video/mp4"></video>
+    </div>
     <div class="wrap hero-grid">
       <div class="cap">
         <div class="eyebrow" data-i="e1">Claude для малого бізнесу</div>
         <h1 data-i="h1">250 промптів, які працюють на ваш бізнес</h1>
+        <div class="rot" data-words="Пости.|Реклама.|Відповіді клієнтам.|Тексти для сайту.|Ціни." data-words-en="Posts.|Ads.|Customer replies.|Website copy.|Pricing.">Пости. Реклама. Відповіді клієнтам. Тексти для сайту. Ціни.</div>
         <p><span data-i="lead1">Копіюєте, замінюєте</span> <span class="slotword" data-i="brackets">[дужки]</span> <span data-i="lead2">на свої дані — і Claude пише пости, відповіді клієнтам, тексти для сайту й рахує ціни.</span></p>
         <div class="row"><a class="btn" href="#checkout" data-i="cta">Отримати за 299 грн</a><a class="btn ghost" href="#inside" data-i="cta2">Що всередині</a></div>
         <ul class="chips"><li data-i="chip1">PDF на пошту одразу після оплати</li><li data-i="chip2">Працює на безкоштовному Claude</li><li data-i="chip3">Менше 2 грн за промпт</li></ul>
