@@ -47,3 +47,7 @@
 - Вставити код Meta Pixel у `<head>` (місце позначене коментарем).
 - Дописати контакти й дані продавця в `privacy.html`.
 - Після реєстрації ФОП — замінити переказ через EasyPay на онлайн-оплату з автоматичною видачею файлу (WayForPay / LiqPay / plata by mono).
+
+## Відео
+
+`assets/media/`: кліпи Mixkit під ліцензією Stock Video Free License (комерційне використання дозволено): [кав'ярня](https://mixkit.co/free-stock-video/skilled-employee-working-in-a-coffee-shop-41856/), [барбершоп](https://mixkit.co/free-stock-video/degrading-a-mans-hair-in-a-barbershop-40120/), [посилка](https://mixkit.co/free-stock-video/hands-of-two-people-sealing-a-package-with-tape-42137/). Кліп на першому екрані і між дужками змінюється разом з обраним бізнесом. Відео завантажуються тільки коли з'являються на екрані (`assets/js/live.js`).

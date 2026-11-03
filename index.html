@@ -24,7 +24,7 @@
 <link rel="manifest" href="/site.webmanifest">
 <link rel="preload" href="/fonts/onest-cyrillic-800-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/onest-cyrillic-400-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="assets/css/site.css?v=20261103a">
+<link rel="stylesheet" href="assets/css/site.css?v=20261103b">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -60,12 +60,15 @@
 <main id="landing">
   <section class="hero" id="hero">
     <div class="wrap">
-      <h1 data-i="h1">250 промптів, які працюють на ваш бізнес</h1>
+      <div class="h1-wrap">
+        <h1 data-i="h1">250 промптів, які працюють на ваш бізнес</h1>
+        <div class="h1-clip" aria-hidden="true"><span>[</span><video data-clip muted loop playsinline preload="none" poster="assets/media/coffee.webp" data-src="assets/media/coffee.mp4"></video><span>]</span></div>
+      </div>
       <div class="hero-grid">
         <div class="cap">
           <p class="who" data-i="e1">Claude для малого бізнесу</p>
           <p class="line"><span data-i="lead1">Копіюєте, замінюєте</span> <span class="slotword" data-i="brackets">[дужки]</span> <span data-i="lead2">на свої дані — і Claude пише пости, відповіді клієнтам, тексти для сайту й рахує ціни.</span></p>
-          <div class="cta-row"><a class="btn" href="#checkout" data-i="cta">Отримати за 399 грн</a></div>
+          <div class="cta-row"><a class="btn" href="#checkout" data-mag data-i="cta">Отримати за 399 грн</a></div>
           <ul class="chips"><li data-i="chip1">PDF на пошту одразу після оплати</li><li data-i="chip2">Працює на безкоштовному Claude</li><li data-i="chip3">Менше 2 грн за промпт</li></ul>
         </div>
         <form class="prompt-card" aria-label="Приклад промпту">
@@ -97,6 +100,7 @@
     <div class="bstage">
       <h2 data-i="flowH">Три кроки до готового результату</h2>
       <div class="brow" aria-hidden="true">
+        <div class="bmedia"><video data-clip muted loop playsinline preload="none" poster="assets/media/coffee.webp" data-src="assets/media/coffee.mp4"></video></div>
         <span class="bl">[</span>
         <span class="bword"></span>
         <span class="br">]</span>
@@ -128,6 +132,18 @@
         <div class="cat"><div class="n">12</div><h3 data-i="k10">Для кафе і ресторанів</h3><p data-i="k10p">Меню, техкарти, бізнес-ланчі, гості.</p></div>
         <div class="cat"><div class="n">12</div><h3 data-i="k11">Для салонів і майстрів</h3><p data-i="k11p">Запис, нагадування, догляд після процедур.</p></div>
         <div class="cat"><div class="n">12</div><h3 data-i="k12">Для інтернет-магазинів</h3><p data-i="k12p">Картки товарів, кошик, повернення, ТТН.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="niches-sec on-ink">
+    <div class="wrap">
+      <h2 class="title" data-i="nhH">3 Claude-проєкти під вашу нішу</h2>
+      <p class="lead" data-i="a3">Готові інструкції для кав'ярні, салону і магазину. Claude один раз дізнається про ваш бізнес і пам'ятає це в кожному чаті проєкту.</p>
+      <div class="niches">
+        <figure class="niche mr" data-tilt><video muted loop playsinline preload="none" poster="assets/media/coffee.webp" data-src="assets/media/coffee.mp4" aria-hidden="true"></video><figcaption><b data-i="nh1">[кав'ярня]</b><span data-i="k10p">Меню, техкарти, бізнес-ланчі, гості.</span></figcaption></figure>
+        <figure class="niche mr" data-tilt><video muted loop playsinline preload="none" poster="assets/media/barber.webp" data-src="assets/media/barber.mp4" aria-hidden="true"></video><figcaption><b data-i="nh2">[салон]</b><span data-i="k11p">Запис, нагадування, догляд після процедур.</span></figcaption></figure>
+        <figure class="niche mr" data-tilt><video muted loop playsinline preload="none" poster="assets/media/parcel.webp" data-src="assets/media/parcel.mp4" aria-hidden="true"></video><figcaption><b data-i="nh3">[магазин]</b><span data-i="k12p">Картки товарів, кошик, повернення, ТТН.</span></figcaption></figure>
       </div>
     </div>
   </section>
@@ -186,7 +202,7 @@
     <div class="wrap">
       <h2 data-i="finH">Ваш бізнес не почне економити час, поки ви не натиснете кнопку</h2>
       <p data-i="finP">Перший готовий контент-план — через 5 хвилин після оплати.</p>
-      <a class="btn" href="#checkout" data-p data-i="finCta">Отримати 250 промптів за 399 грн</a>
+      <a class="btn" href="#checkout" data-mag data-p data-i="finCta">Отримати 250 промптів за 399 грн</a>
     </div>
   </section>
 </main>
@@ -228,8 +244,9 @@
   <div class="wrap legal"><span data-i="foot">© 2026 Нейро Майстерня · незалежний гайд, не пов'язаний з Anthropic. Claude — торгова марка Anthropic.</span><span><a href="privacy.html" data-i="privacyFoot">Політика конфіденційності</a></span></div>
 </footer>
 
-<script type="module" src="assets/js/main.js?v=20261103a"></script>
-<script type="module" src="assets/js/motion.js?v=20261103a"></script>
-<script type="module" src="assets/js/gift.js?v=20261103a"></script>
+<script type="module" src="assets/js/main.js?v=20261103b"></script>
+<script type="module" src="assets/js/motion.js?v=20261103b"></script>
+<script type="module" src="assets/js/gift.js?v=20261103b"></script>
+<script type="module" src="assets/js/live.js?v=20261103b"></script>
 </body>
 </html>

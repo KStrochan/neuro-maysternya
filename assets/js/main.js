@@ -1,5 +1,5 @@
-import { checkout } from './pay.js?v=20261103a';
-import { startPromo, price } from './promo.js?v=20261103a';
+import { checkout } from './pay.js?v=20261103b';
+import { startPromo, price } from './promo.js?v=20261103b';
 
 // Launch price first: it rewrites prices in the markup before the Ukrainian texts are captured below.
 startPromo();
@@ -69,6 +69,10 @@ const EN = {
   finH: "Your business won’t start saving time until you press the button",
   finP: "Your first content plan — 5 minutes after payment.",
   finCta: "Get 250 prompts",
+  nhH: "3 Claude Projects for your niche",
+  nh1: "[coffee shop]",
+  nh2: "[salon]",
+  nh3: "[store]",
   pvLabel: "Type your business into the brackets",
   pv1: "Coffee shop",
   pv2: "Salon",

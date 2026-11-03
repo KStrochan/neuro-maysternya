@@ -43,6 +43,19 @@ const customPlan = (b) => (en()
 
 let currentShort = () => PRESETS.uk[0].short;
 
+// The clip behind the hero and the brackets follows the chosen business.
+const CLIPS = ['coffee', 'barber', 'parcel'];
+function setClip(i) {
+  const name = CLIPS[i];
+  document.querySelectorAll('video[data-clip]').forEach((v) => {
+    if (v.dataset.name === name) return;
+    v.dataset.name = name;
+    v.poster = `assets/media/${name}.webp`;
+    v.dataset.src = `assets/media/${name}.mp4`;
+    if (v.dataset.loaded) { v.src = v.dataset.src; v.play().catch(() => {}); }
+  });
+}
+
 function livePrompt() {
   const card = document.querySelector('.prompt-card');
   if (!card) return;
@@ -76,6 +89,7 @@ function livePrompt() {
   async function choose(i, { typed = true } = {}) {
     const id = ++run, p = list()[i];
     index = i; short = p.short;
+    setClip(i);
     buttons.forEach((b, k) => b.setAttribute('aria-pressed', k === i));
     who.textContent = `[${p.who}]`;
     if (typed && !reduced) {
@@ -124,6 +138,7 @@ function bracketScene() {
   const scene = document.getElementById('how-it-works');
   if (!scene) return null;
   root.classList.add('js-scene');
+  const media = scene.querySelector('.bmedia');
   const left = scene.querySelector('.bl'), right = scene.querySelector('.br'), word = scene.querySelector('.bword'), row = scene.querySelector('.brow');
   const steps = [...scene.querySelectorAll('.bsteps li')];
   const N = 3;
@@ -141,6 +156,9 @@ function bracketScene() {
     const s = Math.min(N - 1, Math.floor(p * N));
     word.style.opacity = clamp((open - .15) * 3);
     word.style.transform = `scale(${.7 + .3 * open})`;
+    media.style.opacity = s < 2 ? clamp((open - .1) * 2) : 0;
+    media.style.transform = `scale(${.55 + .45 * open})`;
+    word.classList.toggle('onclip', s < 2);
     const w = words()[s];
     if (w !== shownWord) { shownWord = w; word.textContent = w; }
     if (s !== current) { current = s; steps.forEach((el, i) => el.classList.toggle('on', i === s)); }
