@@ -1,214 +1,235 @@
-// Motion layer: hero intro, a "live" product preview, scroll reveals and a sticky buy bar on phones.
-// Only opacity/transform are animated, so it stays smooth on mid-range phones.
-// Everything is skipped for prefers-reduced-motion, and the page reads fine without this file.
+// Motion layer: the live prompt (type your business into the brackets), the giant brackets that open on scroll,
+// the moving line of slot words, word-by-word headings and the phone buy bar.
+// Only opacity/transform are animated. Without this file, or with prefers-reduced-motion,
+// the page shows a finished example prompt and all three steps as plain content.
 
 const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const root = document.documentElement;
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
+const ease = (t) => 1 - Math.pow(1 - t, 3);
+const en = () => root.lang === 'en';
 
-// ---------- hero: words of the headline rise in one by one ----------
-function splitWords(el) {
-  const walk = (node) => {
-    [...node.childNodes].forEach((n) => {
-      if (n.nodeType === 3) {
-        const frag = document.createDocumentFragment();
-        n.textContent.split(/(\s+)/).forEach((part) => {
-          if (!part) return;
-          if (/^\s+$/.test(part)) { frag.append(part); return; }
-          const w = document.createElement('span'); w.className = 'w';
-          const i = document.createElement('span'); i.className = 'wi'; i.textContent = part;
-          w.append(i); frag.append(w);
-        });
-        n.replaceWith(frag);
-      } else if (n.nodeType === 1) walk(n);
+function splitWords(el, base = 0, step = 70) {
+  const frag = document.createDocumentFragment();
+  el.textContent.split(/([ \t\r\n]+)/).forEach((part) => {
+    if (!part) return;
+    if (/^[ \t\r\n]+$/.test(part)) { frag.append(part); return; }
+    const w = document.createElement('span'); w.className = 'w';
+    const i = document.createElement('span'); i.className = 'wi'; i.textContent = part;
+    w.append(i); frag.append(w);
+  });
+  el.textContent = ''; el.append(frag);
+  el.querySelectorAll('.wi').forEach((w, k) => w.style.setProperty('--d', `${base + k * step}ms`));
+}
+
+// ---------- the live prompt ----------
+// Sample replies only show the shape of an answer; the card says so («Приклад відповіді»).
+const PRESETS = {
+  uk: [
+    { short: "кав'ярня", biz: "кав'ярня біля університету", who: 'студенти', plan: [['Пн', 'Reels', 'Як ми готуємо першу каву о 7:30'], ['Ср', 'Карусель', '5 способів не заснути на парі'], ['Пт', 'Пост', 'Знижка на каву зі студентським']] },
+    { short: 'салон', biz: 'салон краси в центрі міста', who: 'жінки 25–45', plan: [['Пн', 'Reels', 'Фарбування за 60 секунд: до і після'], ['Ср', 'Карусель', '5 помилок у догляді за волоссям'], ['Пт', 'Сторіз', 'Опитування: який колір наступний?']] },
+    { short: 'магазин', biz: 'інтернет-магазин кераміки', who: 'ті, хто шукає подарунок', plan: [['Пн', 'Reels', 'Як ми пакуємо замовлення'], ['Ср', 'Карусель', '7 подарунків до 500 грн'], ['Пт', 'Пост', 'Історія майстра за цією чашкою']] },
+  ],
+  en: [
+    { short: 'coffee shop', biz: 'a coffee shop next to a university', who: 'students', plan: [['Mon', 'Reels', 'How we pull the first shot at 7:30'], ['Wed', 'Carousel', '5 ways to stay awake in class'], ['Fri', 'Post', 'Student card discount on coffee']] },
+    { short: 'salon', biz: 'a beauty salon in the city centre', who: 'women aged 25–45', plan: [['Mon', 'Reels', 'Colouring in 60 seconds: before and after'], ['Wed', 'Carousel', '5 hair care mistakes'], ['Fri', 'Stories', 'Poll: which colour is next?']] },
+    { short: 'store', biz: 'an online ceramics store', who: 'people looking for a gift', plan: [['Mon', 'Reels', 'How we pack an order'], ['Wed', 'Carousel', '7 gifts under $15'], ['Fri', 'Post', 'The maker behind this mug']] },
+  ],
+};
+const customPlan = (b) => (en()
+  ? [['Mon', 'Reels', `A day in the life: ${b}`], ['Wed', 'Carousel', '5 questions customers ask most'], ['Fri', 'Post', `Why people choose ${b}`]]
+  : [['Пн', 'Reels', `Один день із життя: ${b}`], ['Ср', 'Карусель', '5 питань, які клієнти ставлять найчастіше'], ['Пт', 'Пост', `Чому клієнти обирають нас: ${b}`]]);
+
+let currentShort = () => PRESETS.uk[0].short;
+
+function livePrompt() {
+  const card = document.querySelector('.prompt-card');
+  if (!card) return;
+  const input = card.querySelector('#biz'), who = card.querySelector('.slot-2'), answer = card.querySelector('.answer'), plan = card.querySelector('.plan');
+  const buttons = [...card.querySelectorAll('.preset')];
+  let run = 0, auto = !reduced, index = 0, debounce = 0;
+  const list = () => PRESETS[en() ? 'en' : 'uk'];
+  let short = list()[0].short;
+  currentShort = () => short;
+
+  const renderPlan = (rows) => {
+    plan.textContent = '';
+    rows.forEach((r, i) => {
+      const li = document.createElement('li'); li.style.setProperty('--i', i);
+      const d = document.createElement('span'); d.textContent = r[0];
+      const f = document.createElement('b'); f.textContent = r[1];
+      const t = document.createElement('span'); t.textContent = r[2];
+      li.append(d, f, t); plan.append(li);
     });
   };
-  walk(el);
-  el.querySelectorAll('.wi').forEach((w, k) => w.style.setProperty('--d', `${350 + k * 85}ms`));
-}
-
-// ---------- counters ----------
-function countTo(el, to, { ms = 1100, decimals = 0, suffix = '' } = {}) {
-  const fmt = (v) => v.toLocaleString('uk-UA', { minimumFractionDigits: decimals, maximumFractionDigits: decimals }) + suffix;
-  if (reduced) { el.textContent = fmt(to); return Promise.resolve(); }
-  return new Promise((done) => {
-    const t0 = performance.now();
-    const tick = (t) => {
-      const p = Math.min(1, (t - t0) / ms), e = 1 - Math.pow(1 - p, 3);
-      el.textContent = fmt(to * e);
-      if (p < 1) requestAnimationFrame(tick); else done();
-    };
-    requestAnimationFrame(tick);
+  const think = async (id, rows) => {
+    if (!reduced) {
+      answer.classList.remove('show'); answer.classList.add('wait');
+      await sleep(850);
+      if (id !== run) return;
+    }
+    renderPlan(rows);
+    answer.classList.remove('wait');
+    if (!reduced) { void answer.offsetWidth; answer.classList.add('show'); }
+  };
+  async function choose(i, { typed = true } = {}) {
+    const id = ++run, p = list()[i];
+    index = i; short = p.short;
+    buttons.forEach((b, k) => b.setAttribute('aria-pressed', k === i));
+    who.textContent = `[${p.who}]`;
+    if (typed && !reduced) {
+      input.value = '';
+      for (const ch of p.biz) {
+        if (id !== run) return;
+        input.value += ch;
+        await sleep(32);
+      }
+    } else input.value = p.biz;
+    await think(id, p.plan);
+  }
+  const stopAuto = () => { auto = false; answer.setAttribute('aria-live', 'polite'); };
+  buttons.forEach((b, i) => b.addEventListener('click', () => { stopAuto(); choose(i); }));
+  input.addEventListener('focus', () => { stopAuto(); run++; answer.classList.remove('wait'); });
+  input.addEventListener('input', () => {
+    stopAuto();
+    const id = ++run, v = input.value.trim().slice(0, 60);
+    buttons.forEach((b) => b.setAttribute('aria-pressed', false));
+    who.textContent = en() ? '[your customers]' : '[ваші клієнти]';
+    short = v || list()[index].short;
+    clearTimeout(debounce);
+    if (v) debounce = setTimeout(() => think(id, customPlan(v)), 450);
   });
-}
+  card.addEventListener('submit', (e) => e.preventDefault());
 
-// ---------- live product previews (one per site; each checks its own markup) ----------
-async function ledgerDemo() { // Кухня в цифрах: rows fill in, the total counts up, the food-cost verdict lands
-  const ledger = document.querySelector('.hero .ledger');
-  if (!ledger) return;
-  const rows = [...ledger.querySelectorAll('li')], total = document.getElementById('ledgerTotal'), fc = document.getElementById('ledgerFc');
-  const vals = rows.map((r) => parseFloat(r.lastElementChild.textContent.replace(',', '.')) || 0);
-  rows.forEach((r) => r.classList.remove('on')); fc.classList.remove('on'); total.textContent = '0,00';
-  await sleep(900);
-  let sum = 0;
-  for (let i = 0; i < rows.length; i++) {
-    rows[i].classList.add('on', 'flash'); setTimeout(() => rows[i].classList.remove('flash'), 600);
-    const from = sum; sum += vals[i];
-    const t0 = performance.now();
-    await new Promise((done) => {
-      const tick = (t) => {
-        const p = Math.min(1, (t - t0) / 380);
-        total.textContent = (from + (sum - from) * p).toLocaleString('uk-UA', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-        if (p < 1) requestAnimationFrame(tick); else done();
-      };
-      requestAnimationFrame(tick);
-    });
-    await sleep(160);
+  // Language switch: main.js rewrites the texts, then the example follows.
+  new MutationObserver(() => { stopAuto(); choose(0, { typed: false }); }).observe(root, { attributes: true, attributeFilter: ['lang'] });
+
+  choose(0, { typed: false });
+  if (auto) {
+    const heroInView = { v: true };
+    new IntersectionObserver(([e]) => { heroInView.v = e.isIntersecting; }).observe(card);
+    (async () => {
+      await sleep(7000);
+      while (auto) {
+        if (heroInView.v) await choose((index + 1) % buttons.length);
+        await sleep(6500);
+      }
+    })();
   }
-  await sleep(250); fc.classList.add('on', 'pop');
 }
 
-async function freezerDemo() { // Заготовки: weekends light up and the pack counter climbs to 20
-  const ui = document.querySelector('.hero .weeks-ui');
-  if (!ui) return;
-  const weeks = [...ui.querySelectorAll('[data-week]')], count = document.getElementById('packCount');
-  weeks.forEach((w) => w.classList.remove('on')); count.textContent = '0 / 20';
-  await sleep(900);
-  for (let i = 0; i < weeks.length; i++) {
-    weeks[i].classList.add('on', 'pop');
-    const from = i * 5, t0 = performance.now();
-    await new Promise((done) => {
-      const tick = (t) => {
-        const p = Math.min(1, (t - t0) / 420);
-        count.textContent = `${Math.round(from + 5 * p)} / 20`;
-        if (p < 1) requestAnimationFrame(tick); else done();
-      };
-      requestAnimationFrame(tick);
-    });
-    await sleep(140);
-  }
-  ui.querySelector('.count').classList.add('pop');
+// ---------- scene: the brackets open ----------
+function bracketScene() {
+  const scene = document.getElementById('how-it-works');
+  if (!scene) return null;
+  root.classList.add('js-scene');
+  const left = scene.querySelector('.bl'), right = scene.querySelector('.br'), word = scene.querySelector('.bword'), row = scene.querySelector('.brow');
+  const steps = [...scene.querySelectorAll('.bsteps li')];
+  const N = 3;
+  let current = -1, blue = false, shownWord = '';
+  const words = () => (en() ? ['your details', currentShort(), 'done'] : ['ваші дані', currentShort(), 'готово']);
+  return function render() {
+    const r = scene.getBoundingClientRect();
+    const p = clamp(-r.top / (r.height - innerHeight));
+    const width = row.clientWidth, glyph = left.getBoundingClientRect().width;
+    const maxShift = Math.max(40, width / 2 - glyph / 2);
+    const open = ease(clamp(p / .42));
+    const shift = 30 + (maxShift - 30) * open;
+    left.style.transform = `translateX(${-shift}px)`;
+    right.style.transform = `translateX(${shift}px)`;
+    const s = Math.min(N - 1, Math.floor(p * N));
+    word.style.opacity = clamp((open - .15) * 3);
+    word.style.transform = `scale(${.7 + .3 * open})`;
+    const w = words()[s];
+    if (w !== shownWord) { shownWord = w; word.textContent = w; }
+    if (s !== current) { current = s; steps.forEach((el, i) => el.classList.toggle('on', i === s)); }
+    const b = p > .7;
+    if (b !== blue) { blue = b; root.classList.toggle('bluefield', b); }
+  };
 }
 
-async function promptDemo() { // Нейро: the [brackets] get filled, Claude "thinks", then the answer appears
-  const card = document.querySelector('.hero .prompt-card');
-  if (!card) return;
-  const slots = [...card.querySelectorAll('.slotword')], answer = card.querySelector('.prompt-answer');
-  answer.classList.add('wait');
-  await sleep(1000);
-  for (const s of slots) { s.classList.add('fill'); await sleep(450); }
-  answer.classList.add('typing'); await sleep(1100);
-  answer.classList.remove('typing', 'wait'); answer.classList.add('show');
+// ---------- the moving line ----------
+function ticker() {
+  const box = document.querySelector('.ticker');
+  if (!box) return null;
+  const lines = [...box.querySelectorAll('p')];
+  return () => {
+    const r = box.getBoundingClientRect();
+    if (r.bottom < 0 || r.top > innerHeight) return;
+    const p = (innerHeight - r.top) / (innerHeight + r.height);
+    lines[0].style.transform = `translateX(${-p * 30}%)`;
+    lines[1].style.transform = `translateX(${-34 + p * 30}%)`;
+  };
 }
 
-// ---------- scroll reveals ----------
-const REVEAL = [
-  'section.block .kicker', 'section.block h2.title', 'section.block .lead',
-  '.pain', '.product', '.bundle', '.steps li', '.flow li', '.label-card', '.stats > div',
-  '.cat', '.tier', '.faq details', '.order form', '.inside > *',
-];
+// ---------- reveals ----------
+const REVEAL = '.lead,.cat,.fit>div,.recap-list li,.price-now,#orderForm,.faq details,.final p,.final .btn';
 function reveals() {
-  const els = document.querySelectorAll(REVEAL.join(','));
   const io = new IntersectionObserver((entries) => {
     entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
-  }, { rootMargin: '0px 0px -8% 0px', threshold: 0.12 });
-  els.forEach((el) => {
-    if (el.closest('.hero')) return;
-    const sibs = [...el.parentElement.children].filter((c) => c.matches(REVEAL.join(',')));
-    el.style.setProperty('--rd', `${Math.min(sibs.indexOf(el), 5) * 80}ms`);
+  }, { rootMargin: '0px 0px -8% 0px', threshold: .08 });
+  document.querySelectorAll(REVEAL).forEach((el) => {
+    const sibs = [...el.parentElement.children];
+    el.style.setProperty('--rd', `${(sibs.indexOf(el) % 2) * 90}ms`);
     el.classList.add('rv'); io.observe(el);
   });
-  // numbers in stat blocks count up when they scroll in
-  document.querySelectorAll('.stats b, .cat .n').forEach((b) => {
-    const m = b.textContent.trim().match(/^(~?)(\d+)$/);
-    if (!m) return;
-    const to = +m[2], pre = m[1], pad = b.textContent.trim().length - pre.length;
-    const o = new IntersectionObserver(([e]) => {
+  document.querySelectorAll('.title,.final h2').forEach((el) => {
+    if (root.lang === 'en') return; // the English texts arrive through main.js and stay plain
+    splitWords(el, 0, 55); el.classList.add('split'); io.observe(el);
+  });
+  const share = document.querySelector('.share');
+  if (share) { io.observe(share); }
+  document.querySelectorAll('.cat .n').forEach((b) => {
+    const to = +b.textContent;
+    new IntersectionObserver(([e], o) => {
       if (!e.isIntersecting) return; o.disconnect();
       const t0 = performance.now();
       const tick = (t) => {
-        const p = Math.min(1, (t - t0) / 900), v = Math.round(to * (1 - Math.pow(1 - p, 3)));
-        b.textContent = pre + String(v).padStart(pad, '0');
-        if (p < 1) requestAnimationFrame(tick);
+        const k = clamp((t - t0) / 900);
+        b.textContent = Math.round(to * ease(k));
+        if (k < 1) requestAnimationFrame(tick);
       };
       requestAnimationFrame(tick);
-    }, { threshold: 0.6 });
-    o.observe(b);
+    }, { threshold: .6 }).observe(b);
   });
 }
 
 // ---------- sticky buy bar on phones ----------
 function buyBar() {
-  const hero = document.getElementById('hero');
-  const cap = hero && hero.querySelector('.cap');
-  const order = document.getElementById('order') || document.getElementById('checkout');
-  if (!cap || !order) return;
+  const hero = document.getElementById('hero'), order = document.getElementById('checkout');
+  if (!hero || !order) return;
   const bar = document.createElement('div');
   bar.className = 'm-buy'; bar.setAttribute('aria-hidden', 'true');
-  bar.innerHTML = `<div class="m-buy-t"><b></b><small></small></div><a class="btn" href="#${order.id}" tabindex="-1"></a>`;
-  const price = bar.querySelector('b'), name = bar.querySelector('small'), btn = bar.querySelector('.btn');
+  bar.innerHTML = '<div><b></b><small></small></div><a class="btn" href="#checkout" tabindex="-1"></a>';
   const sync = () => {
-    const m = cap.textContent.match(/\$\d+(?:\.\d+)?|\d[\d\s]*\s?грн/);
-    price.textContent = m ? m[0].trim() : '';
-    name.textContent = (document.querySelector('.logo')?.textContent || '').trim();
-    btn.textContent = document.documentElement.lang === 'en' ? 'Buy now' : 'Купити';
+    bar.querySelector('b').textContent = document.querySelector('[data-price]').textContent;
+    bar.querySelector('small').textContent = en() ? '250 prompts, 3 projects' : '250 промптів, 3 проєкти';
+    bar.querySelector('.btn').textContent = en() ? 'Buy now' : 'Купити';
   };
   sync();
-  new MutationObserver(sync).observe(cap, { childList: true, characterData: true, subtree: true });
+  new MutationObserver(() => setTimeout(sync)).observe(root, { attributes: true, attributeFilter: ['lang'] });
   document.body.append(bar);
   let heroGone = false, orderSeen = false;
   const update = () => bar.classList.toggle('show', heroGone && !orderSeen && !document.getElementById('landing')?.hidden);
   new IntersectionObserver(([e]) => { heroGone = !e.isIntersecting; update(); }).observe(hero);
-  new IntersectionObserver(([e]) => { orderSeen = e.isIntersecting; update(); }, { threshold: 0.05 }).observe(order);
-}
-
-// ---------- hero: looping background video ----------
-function heroVideo() {
-  const v = document.querySelector('.hero-media video');
-  if (!v) return;
-  if (reduced) { v.remove(); return; } // the poster frame stays
-  v.addEventListener('playing', () => v.classList.add('on'), { once: true });
-  v.play().catch(() => {});
-}
-
-// ---------- hero: one word at a time under the headline ----------
-function rotWords() {
-  const el = document.querySelector('.hero .rot');
-  if (!el) return;
-  const list = () => ((document.documentElement.lang === 'en' && el.dataset.wordsEn) || el.dataset.words).split('|');
-  let spans = [], i = 0, lang = null;
-  const build = () => {
-    lang = document.documentElement.lang;
-    const words = list();
-    if (reduced) { el.textContent = words.join(' '); return; }
-    el.textContent = '';
-    const sr = document.createElement('span'); sr.className = 'sr-only'; sr.textContent = words.join(' ');
-    el.append(sr);
-    spans = words.map((w) => { const s = document.createElement('span'); s.textContent = w; s.setAttribute('aria-hidden', 'true'); el.append(s); return s; });
-    i = 0; spans[0].classList.add('on');
-  };
-  build();
-  new MutationObserver(() => { if (document.documentElement.lang !== lang) build(); }).observe(document.documentElement, { attributes: true, attributeFilter: ['lang'] });
-  if (reduced) return;
-  setInterval(() => {
-    if (!spans.length) return;
-    const prev = spans[i];
-    prev.classList.remove('on'); prev.classList.add('out');
-    i = (i + 1) % spans.length;
-    spans[i].classList.remove('out'); spans[i].classList.add('on');
-    setTimeout(() => prev.classList.remove('out'), 260);
-  }, 2200);
+  new IntersectionObserver(([e]) => { orderSeen = e.isIntersecting; update(); }, { threshold: .05 }).observe(order);
 }
 
 // ---------- boot ----------
-root.classList.add('motion');
-heroVideo();
-rotWords();
-if (!reduced) {
-  const h1 = document.querySelector('.hero h1');
-  if (h1) splitWords(h1);
-  root.classList.add('intro');
-  ledgerDemo(); freezerDemo(); promptDemo();
-  reveals();
-}
+livePrompt();
 buyBar();
+if (!reduced) {
+  root.classList.add('motion');
+  const h1 = document.querySelector('.hero h1');
+  if (h1) splitWords(h1, 150, 75);
+  root.classList.add('intro');
+  reveals();
+  const renders = [bracketScene(), ticker()].filter(Boolean);
+  let queued = false;
+  const frame = () => { queued = false; renders.forEach((r) => r()); };
+  const ask = () => { if (!queued) { queued = true; requestAnimationFrame(frame); } };
+  addEventListener('scroll', ask, { passive: true });
+  addEventListener('resize', ask);
+  frame();
+}

@@ -1,5 +1,5 @@
-import { checkout } from './pay.js?v=20261027a';
-import { startPromo, price } from './promo.js?v=20261027a';
+import { checkout } from './pay.js?v=20261103a';
+import { startPromo, price } from './promo.js?v=20261103a';
 
 // Launch price first: it rewrites prices in the markup before the Ukrainian texts are captured below.
 startPromo();
@@ -69,6 +69,13 @@ const EN = {
   finH: "Your business won’t start saving time until you press the button",
   finP: "Your first content plan — 5 minutes after payment.",
   finCta: "Get 250 prompts",
+  pvLabel: "Type your business into the brackets",
+  pv1: "Coffee shop",
+  pv2: "Salon",
+  pv3: "Store",
+  pvExample: "Example reply",
+  mq1: "[coffee shop] [barbershop] [bakery] [yoga studio] [online course] [flower shop] [dental clinic] [coffee shop] [barbershop] [bakery]",
+  mq2: "[content plan] [customer reply] [website copy] [pricing] [ads] [job post] [content plan] [customer reply] [website copy]",
   gTag: "Gift",
   gH: "Wait! Grab 20 prompts for free",
   gP: "The most useful prompts for marketing, sales and pricing — the PDF arrives in a minute.",
@@ -113,9 +120,8 @@ $('#l-uk').addEventListener('click', () => switchLang('uk'));
 $('#l-en').addEventListener('click', () => switchLang('en'));
 applyLang();
 
-const hero = document.getElementById('hero');
 const header = document.querySelector('.site-header');
-const onScroll = () => header.classList.toggle('solid', !$('#landing').hidden && hero.getBoundingClientRect().bottom < 80 || $('#landing').hidden);
+const onScroll = () => header.classList.toggle('solid', scrollY > 24 || $('#landing').hidden);
 addEventListener('scroll', onScroll, { passive: true });
 onScroll();
 
