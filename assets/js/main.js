@@ -1,5 +1,5 @@
-import { checkout } from './pay.js?v=20261027a';
-import { startPromo, price } from './promo.js?v=20261027a';
+import { checkout, lemonCheckout, lemonUrl } from './pay.js?v=20261103a';
+import { startPromo, price } from './promo.js?v=20261103a';
 
 // Launch price first: it rewrites prices in the markup before the Ukrainian texts are captured below.
 startPromo();
@@ -31,6 +31,7 @@ const EN = {
   k12: 'For online stores', k12p: 'Product listings, abandoned carts, returns, shipping.',
   ladK: 'Price', ladH: 'Everything in one pack', t3h: 'Full pack', t3a: '250 prompts in 12 categories', t3b: '3 Claude Projects: café, salon, online store',
   t3c: '“Website in one evening” guide: brief, prompts and free publishing', t3d: '5 rules that make Claude answer like a pro', t3n: 'One payment · PDF, 29 pages', cta3: 'Get the pack',
+  payNote: 'We will email you the payment details and the PDF.',
   coK: 'Checkout', coH: 'Get the full pack', coLead: 'Leave your email and we will send you the payment details and the PDF.',
   lFull: 'Full pack: 250 prompts, 3 projects, guide', fName: 'Name', fContact: 'Email', submit: 'Get it',
   agree: 'By clicking the button you agree to the', privacyLink: 'privacy policy', faqK: 'Questions', faqH: 'FAQ',
@@ -133,8 +134,13 @@ $('#orderForm').addEventListener('submit', async (e) => {
   try {
     const site = `Нейро Майстерня (${lang.toUpperCase()})`, product = MSG[lang].product + ' — ' + money(P.full);
     const showThanks = () => { $('#landing').hidden = true; $('#thanks').hidden = false; $('#demoNote').hidden = !DEMO; scrollTo(0, 0); onScroll(); };
-    // Ukrainian buyers pay by EasyPay card transfer; the English version stays a pre-order.
-    if (lang === 'uk' && !DEMO) {
+    // Ukrainian buyers pay via Lemon Squeezy (card, Apple Pay, Google Pay); without a checkout URL, by EasyPay transfer.
+    // The English version stays a pre-order.
+    if (lang === 'uk' && !DEMO && lemonUrl()) {
+      st.textContent = 'Відкриваємо оплату…';
+      await lemonCheckout({ email: contact, site, onSuccess: () => { $('[data-i="thLead"]').textContent = 'PDF можна завантажити у вікні оплати, посилання також прийшло на вашу пошту.'; showThanks(); } });
+      setTimeout(() => { if (st.textContent === 'Відкриваємо оплату…') st.textContent = ''; }, 4000);
+    } else if (lang === 'uk' && !DEMO) {
       const lead = (t) => { $('[data-i="thLead"]').textContent = t; };
       const mode = await checkout($('#orderForm'), { site, product, price: money(P.full), amount: P.full, name, contact,
         onDone: (delivered) => { if (!delivered) lead('Перевіряємо оплату — PDF прийде на вашу пошту протягом дня.'); setTimeout(showThanks, 1600); } });
